@@ -130,7 +130,7 @@ module.exports = {
             res.status(200).json({
                 success: true,
                 count: user.bookmarks.length,
-                bookmarks: user.bookmarks,
+                data: user.bookmarks.map((story) => ({ ...story.toObject(), isBookmarked: true })),
             });
 
         } catch (error) {
