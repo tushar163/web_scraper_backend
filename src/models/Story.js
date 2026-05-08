@@ -2,11 +2,25 @@ const mongoose = require("mongoose");
 
 const storySchema = new mongoose.Schema(
     {
-        title: String,
-        url: String,
-        points: Number,
-        author: String,
-        postedAt: String,
+        title: {
+            type: String,
+        },
+
+        url: {
+            type: String,
+        },
+
+        points: {
+            type: Number,
+        },
+
+        author: {
+            type: String,
+        },
+
+        postedAt: {
+            type: String,
+        },
     },
     {
         timestamps: true,
