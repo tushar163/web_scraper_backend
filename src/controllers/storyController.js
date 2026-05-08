@@ -11,11 +11,20 @@ module.exports = {
             const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
             const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 10, 1), 100);
             const skip = (page - 1) * limit;
-
+            let bookmarkedIds = [];
+            
+            if (req.user) {
+                const user = await User.findById(req.user.id);
+                bookmarkedIds = user.bookmarks.map((id) => id.toString());
+            }
             const [stories, total] = await Promise.all([
                 Story.find().sort({ points: -1, createdAt: -1 }).skip(skip).limit(limit),
                 Story.countDocuments(),
             ]);
+            const storiesWithBookmark = stories.map((story) => ({
+                ...story.toObject(),
+                isBookmarked: bookmarkedIds.includes(story._id.toString()),
+            }));
 
             res.status(200).json({
                 success: true,
@@ -23,7 +32,7 @@ module.exports = {
                 limit,
                 total,
                 totalPages: Math.ceil(total / limit),
-                data: stories,
+                data: storiesWithBookmark,
             });
         } catch (error) {
             res.status(500).json({
