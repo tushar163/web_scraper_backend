@@ -40,11 +40,16 @@ const scrapeStories = async () => {
             }
         });
 
-        // Clear old stories
-        await Story.deleteMany();
-
-        // Save new stories
-        await Story.insertMany(stories);
+        for (const story of stories) {
+            await Story.findOneAndUpdate(
+                { sourceId: story.sourceId },
+                story,
+                {
+                    upsert: true,
+                    returnDocument: "after",
+                }
+            );
+        }
 
         console.log("Stories scraped successfully");
     } catch (error) {
