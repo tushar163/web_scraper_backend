@@ -5,7 +5,7 @@ const connectDB = require("./src/config/db");
 
 const scrapeStories = require("./src/services/scraperService");
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 4000;
 
 const startServer = async () => {
     try {
